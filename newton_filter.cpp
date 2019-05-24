@@ -83,17 +83,17 @@ void newton_interp(const data_t R, data_t in, data_t *out, data_t *out_interp, b
     *strobe = false;
     d -= R;
     
+    newton_interp_label3:for(i = K - 1; i >= 0; i--)
+    {
+#pragma HLS UNROLL
+        //dk[i] = (-d + i) / (i + 1);
+        dk[i] = (-d + i) * reciproc[i];
+        mx[i] = dk[i] * yk[i + 1];
+        yk[i] = mx[i] + dx[i];
+    }
+    
     if(d > 0)
     {
-        newton_interp_label3:for(i = K - 1; i >= 0; i--)
-        {
-#pragma HLS UNROLL
-            //dk[i] = (-d + i) / (i + 1);
-            dk[i] = (-d + i) * reciproc[i];
-            mx[i] = dk[i] * yk[i + 1];
-            yk[i] = mx[i] + dx[i];
-        }
-        
         *out_interp = yk[0];
         *strobe = true;
         d -= R;
@@ -127,17 +127,17 @@ void newton_decim(const data_t R, data_t in, data_t *out, bool *strobe)
     yk[K] = dx[K];
     *strobe = false;
     
+    newton_decim_label2:for(i = K - 1; i >= 0; i--)
+    {
+#pragma HLS UNROLL
+        //dk[i] = (-d + i) / (i + 1);
+        dk[i] = (-d + i) * reciproc[i];
+        mx[i] = dk[i] * yk[i + 1];
+        yk[i] = mx[i] + dx[i];
+    }
+    
     if(d > 0)
     {
-        newton_decim_label2:for(i = K - 1; i >= 0; i--)
-        {
-#pragma HLS UNROLL
-            //dk[i] = (-d + i) / (i + 1);
-            dk[i] = (-d + i) * reciproc[i];
-            mx[i] = dk[i] * yk[i + 1];
-            yk[i] = mx[i] + dx[i];
-        }
-        
         *out = yk[0];
         *strobe = true;
         d -= R;
@@ -198,28 +198,28 @@ void newton_interp(const data_t R, data_t in, data_t *out, data_t *out_interp, b
     *strobe = false;
     d -= R;
     
+    dk[4] = (-d + 4) / 5;
+    mx[4] = dk[4] * yk[5];
+    yk[4] = mx[4] + dx[4];
+    
+    dk[3] = (-d + 3) / 4;
+    mx[3] = dk[3] * yk[4];
+    yk[3] = mx[3] + dx[3];
+    
+    dk[2] = (-d + 2) / 3;
+    mx[2] = dk[2] * yk[3];
+    yk[2] = mx[2] + dx[2];
+    
+    dk[1] = (-d + 1) / 2;
+    mx[1] = dk[1] * yk[2];
+    yk[1] = mx[1] + dx[1];
+    
+    dk[0] = -d;
+    mx[0] = dk[0] * yk[1];
+    yk[0] = mx[0] + dx[0];
+        
     if(d > 0)
     {
-        dk[4] = (-d + 4) / 5;
-        mx[4] = dk[4] * yk[5];
-        yk[4] = mx[4] + dx[4];
-        
-        dk[3] = (-d + 3) / 4;
-        mx[3] = dk[3] * yk[4];
-        yk[3] = mx[3] + dx[3];
-        
-        dk[2] = (-d + 2) / 3;
-        mx[2] = dk[2] * yk[3];
-        yk[2] = mx[2] + dx[2];
-        
-        dk[1] = (-d + 1) / 2;
-        mx[1] = dk[1] * yk[2];
-        yk[1] = mx[1] + dx[1];
-        
-        dk[0] = -d;
-        mx[0] = dk[0] * yk[1];
-        yk[0] = mx[0] + dx[0];
-        
         *out_interp = yk[0];
         *strobe = true;
         d -= R;
