@@ -1,6 +1,6 @@
-# Fraction_delay_filter_VivadoHLS
+# Fractional_Sample_Rate_Conversion_Filter_VivadoHLS
 
-Project:	Fraction delay filter for interpolation and decimation
+Project:	Fractional Sample Rate Conversion Filter for interpolation and decimation
 
 Purpose:	This program is used for resampling signal. The method is based on 
 newton interpolation formula. 
